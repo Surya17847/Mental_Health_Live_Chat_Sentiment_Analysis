@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Sentiment Detection - Big Data Analytics</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .crisis-pulse {
+            animation: pulse 2s infinite;
+            border: 2px solid #ef4444;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .positive { border-left: 4px solid #10b981; background-color: #f0fdf4; }
+        .negative { border-left: 4px solid #ef4444; background-color: #fef2f2; }
+        .neutral { border-left: 4px solid #6b7280; background-color: #f9fafb; }
+        .crisis { border-left: 4px solid #dc2626; background-color: #fef2f2; animation: crisisFlash 1s infinite; }
+        @keyframes crisisFlash {
+            0%, 100% { background-color: #fef2f2; }
+            50% { background-color: #fecaca; }
+        }
+        .mental-health-badge { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8 bg-white rounded-2xl shadow-lg p-8">
+            <div class="flex items-center justify-center mb-4">
+                <span class="text-4xl mr-4">🧠</span>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Mental Health Sentiment Detection
+                </h1>
+            </div>
+            <p class="text-lg text-gray-600 mb-4">Real-time Big Data Analytics using Pure Python Message Bus</p>
+            <div class="flex justify-center space-x-4 text-sm text-gray-500">
+                <span class="flex items-center">
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    Message Bus
+                </span>
+                <span class="flex items-center">
+                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                    Real-time AI
+                </span>
+                <span class="flex items-center">
+                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                    Crisis Detection
+                </span>
+            </div>
+        </div>
+
+        <!-- Service Status Panel -->
+        <div class="mb-6 bg-white rounded-2xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold mb-4 flex items-center">
+                <span class="mr-2">⚙️</span> System Status
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4" id="services-status">
+                <div class="text-center p-4 bg-green-100 rounded-lg">
+                    <div class="text-sm font-medium text-gray-600">Message Bus</div>
+                    <div class="text-lg font-semibold text-green-600">✅ Running</div>
+                </div>
+                <div class="text-center p-4 bg-green-100 rounded-lg">
+                    <div class="text-sm font-medium text-gray-600">Sentiment AI</div>
+                    <div class="text-lg font-semibold text-green-600">✅ Active</div>
+                </div>
+                <div class="text-center p-4 bg-blue-100 rounded-lg">
+                    <div class="text-sm font-medium text-gray-600">Data Storage</div>
+                    <div class="text-lg font-semibold text-blue-600">✅ In-Memory</div>
+                </div>
+            </div>
+            <div class="text-center text-sm text-gray-600">
+                Powered by Pure Python Message Bus • Real-time AI Analysis • Big Data Concepts
+            </div>
+        </div>
+
+        <!-- Big Data Stats Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Messages -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Messages</p>
+                        <p id="total-messages" class="text-3xl font-bold text-gray-900">0</p>
+                    </div>
+                    <div class="p-3 bg-blue-100 rounded-xl">
+                        <span class="text-2xl text-blue-600">💬</span>
+                    </div>
+                </div>
+                <div class="mt-2 text-xs text-gray-500">Processed in real-time</div>
+            </div>
+
+            <!-- Positive Sentiment -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Positive</p>
+                        <p id="positive-percent" class="text-3xl font-bold text-green-600">0%</p>
+                    </div>
+                    <div class="p-3 bg-green-100 rounded-xl">
+                        <span class="text-2xl text-green-600">😊</span>
+                    </div>
+                </div>
+                <div id="positive-count" class="mt-2 text-xs text-gray-500">0 messages</div>
+            </div>
+
+            <!-- Negative Sentiment -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Negative</p>
+                        <p id="negative-percent" class="text-3xl font-bold text-red-600">0%</p>
+                    </div>
+                    <div class="p-3 bg-red-100 rounded-xl">
+                        <span class="text-2xl text-red-600">😔</span>
+                    </div>
+                </div>
+                <div id="negative-count" class="mt-2 text-xs text-gray-500">0 messages</div>
+            </div>
+
+            <!-- Crisis Alerts -->
+            <div id="crisis-stat" class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300 crisis-pulse hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-red-600">Crisis Alerts</p>
+                        <p id="crisis-count" class="text-3xl font-bold text-red-600">0</p>
+                    </div>
+                    <div class="p-3 bg-red-100 rounded-xl">
+                        <span class="text-2xl text-red-600">🚨</span>
+                    </div>
+                </div>
+                <div class="mt-2 text-xs text-red-500">Immediate attention needed</div>
+            </div>
+        </div>
+
+        <!-- Charts and Chat Interface -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Sentiment Chart -->
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="mr-2">📊</span> Real-time Sentiment Analysis
+                </h3>
+                <div id="sentiment-chart" class="h-80"></div>
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="mr-2">💭</span> Mental Health Chat
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+                        <input type="text" id="username-input" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               value="WellnessSeeker" placeholder="Enter your name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
+                        <textarea id="message-input" 
+                                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32"
+                                  placeholder="Share how you're feeling... (e.g., 'Feeling anxious about work' or 'Had a great therapy session')"></textarea>
+                    </div>
+                    <button id="send-btn" 
+                            class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-4 rounded-lg font-semibold transition duration-300 transform hover:scale-105">
+                        Send & Analyze Message
+                    </button>
+                    <div class="text-xs text-gray-500 text-center">
+                        Messages are processed in real-time using Pure Python Message Bus
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Feed and Alerts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Live Message Feed -->
+            <div class="bg-white rounded-2xl shadow-lg">
+                <div class="p-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <span class="mr-2">🔴</span> Live Message Feed
+                    </h3>
+                </div>
+                <div id="chat-feed" class="h-96 overflow-y-auto p-4 space-y-3">
+                    <div class="text-center text-gray-500 py-8">
+                        <div class="text-4xl mb-4">💬</div>
+                        <p>Send a message to see real-time sentiment analysis</p>
+                        <p class="text-sm mt-2">Powered by Pure Python Message Bus & AI</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crisis Alerts Panel -->
+            <div id="crisis-panel" class="bg-white rounded-2xl shadow-lg hidden">
+                <div class="p-4 border-b border-red-200 bg-red-50">
+                    <h3 class="text-lg font-semibold text-red-800 flex items-center">
+                        <span class="mr-2">🚨</span> Crisis Detection Alerts
+                    </h3>
+                </div>
+                <div id="crisis-alerts" class="h-96 overflow-y-auto p-4 space-y-3">
+                    <!-- Crisis alerts will appear here -->
+                </div>
+            </div>
+
+            <!-- System Insights -->
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg">
+                <div class="p-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <span class="mr-2">📈</span> System Insights
+                    </h3>
+                </div>
+                <div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600" id="avg-sentiment">0.00</div>
+                        <div class="text-sm text-blue-600">Avg Sentiment Score</div>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600" id="mental-health-count">0</div>
+                        <div class="text-sm text-purple-600">Mental Health Messages</div>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600" id="attention-needed">0%</div>
+                        <div class="text-sm text-green-600">Need Attention</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Big Data Tools Footer -->
+        <div class="mt-8 text-center text-gray-500">
+            <p>Powered by: <span class="font-semibold">Pure Python Message Bus</span> • <span class="font-semibold">Real-time AI Analysis</span> • <span class="font-semibold">Crisis Detection</span></p>
+            <p class="text-sm mt-2">Mental Health Sentiment Detection - Big Data Analytics Project</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Socket.IO
+        const socket = io();
+
+        // Chart instances
+        let sentimentChart;
+
+        // Duplicate prevention
+        const messageHistory = new Set();
+        let isFetching = false;
+
+        // Initialize charts
+        function initializeCharts() {
+            // Sentiment Distribution Chart
+            const sentimentData = [{
+                values: [0, 0, 0, 0],
+                labels: ['Positive', 'Negative', 'Neutral', 'Crisis'],
+                type: 'pie',
+                marker: {
+                    colors: ['#10b981', '#ef4444', '#6b7280', '#dc2626']
+                },
+                textinfo: 'label+percent',
+                insidetextorientation: 'radial',
+                hoverinfo: 'label+value+percent',
+                hole: 0.4
+            }];
+
+            const layout = {
+                height: 320,
+                showlegend: true,
+                margin: { t: 0, b: 0, l: 0, r: 0 },
+                annotations: [{
+                    text: 'Sentiment',
+                    showarrow: false,
+                    font: { size: 14 }
+                }]
+            };
+
+            sentimentChart = document.getElementById('sentiment-chart');
+            Plotly.newPlot(sentimentChart, sentimentData, layout);
+        }
+
+        // Generate unique message ID to prevent duplicates
+        function generateMessageId(sentimentData) {
+            return `${sentimentData.username}_${sentimentData.text}_${sentimentData.timestamp}`;
+        }
+
+        // Update statistics display
+        function updateStatsDisplay(stats) {
+            if (!stats) {
+                console.warn('No stats data received');
+                return;
+            }
+
+            try {
+                // Basic stats
+                document.getElementById('total-messages').textContent = (stats.total_messages || 0).toLocaleString();
+                document.getElementById('positive-percent').textContent = (stats.positive_percent || 0).toFixed(1) + '%';
+                document.getElementById('negative-percent').textContent = (stats.negative_percent || 0).toFixed(1) + '%';
+                document.getElementById('positive-count').textContent = (stats.sentiment_counts?.POSITIVE || 0) + ' messages';
+                document.getElementById('negative-count').textContent = (stats.sentiment_counts?.NEGATIVE || 0) + ' messages';
+                document.getElementById('crisis-count').textContent = stats.sentiment_counts?.CRISIS || 0;
+
+                // Insights
+                document.getElementById('avg-sentiment').textContent = (stats.average_sentiment || 0).toFixed(2);
+                document.getElementById('mental-health-count').textContent = stats.mental_health_messages || 0;
+                document.getElementById('attention-needed').textContent = (stats.crisis_percent || 0).toFixed(1) + '%';
+
+                // Update pie chart
+                const values = [
+                    stats.sentiment_counts?.POSITIVE || 0,
+                    stats.sentiment_counts?.NEGATIVE || 0,
+                    stats.sentiment_counts?.NEUTRAL || 0,
+                    stats.sentiment_counts?.CRISIS || 0
+                ];
+
+                Plotly.update(sentimentChart, {
+                    values: [values]
+                });
+
+                // Show/hide crisis panel
+                const crisisStat = document.getElementById('crisis-stat');
+                const crisisPanel = document.getElementById('crisis-panel');
+                if (crisisStat && crisisPanel && (stats.sentiment_counts?.CRISIS || 0) > 0) {
+                    crisisStat.classList.remove('hidden');
+                    crisisPanel.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error updating stats display:', error);
+            }
+        }
+
+        // Add message to chat feed (with duplicate prevention)
+        function addMessageToFeed(sentimentData) {
+            if (!sentimentData || !sentimentData.text) {
+                console.warn('Invalid sentiment data received');
+                return;
+            }
+
+            const messageId = generateMessageId(sentimentData);
+            
+            // Prevent duplicates
+            if (messageHistory.has(messageId)) {
+                console.log('Duplicate message detected, skipping:', messageId);
+                return;
+            }
+            
+            messageHistory.add(messageId);
+
+            const chatFeed = document.getElementById('chat-feed');
+            if (!chatFeed) {
+                console.error('Chat feed element not found');
+                return;
+            }
+            
+            // Remove placeholder if exists
+            const placeholder = chatFeed.querySelector('.text-center');
+            if (placeholder) placeholder.remove();
+
+            const messageDiv = document.createElement('div');
+            const sentiment = sentimentData;
+            
+            let sentimentClass = 'neutral';
+            let sentimentIcon = '😐';
+            let sentimentText = 'Neutral';
+            
+            switch(sentiment.sentiment_label) {
+                case 'POSITIVE':
+                    sentimentClass = 'positive';
+                    sentimentIcon = '😊';
+                    sentimentText = 'Positive';
+                    break;
+                case 'NEGATIVE':
+                    sentimentClass = 'negative';
+                    sentimentIcon = '😔';
+                    sentimentText = 'Negative';
+                    break;
+                case 'CRISIS':
+                    sentimentClass = 'crisis';
+                    sentimentIcon = '🚨';
+                    sentimentText = 'Crisis';
+                    break;
+            }
+
+            const isMentalHealth = sentiment.mental_health_context?.has_any_context || false;
+
+            messageDiv.className = `p-4 rounded-lg ${sentimentClass} transform transition duration-300 hover:scale-105`;
+            messageDiv.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="font-semibold text-gray-800">${sentiment.username || 'Anonymous'}</span>
+                        <span class="text-xs text-gray-500">${new Date(sentiment.timestamp).toLocaleTimeString()}</span>
+                        ${isMentalHealth ? '<span class="mental-health-badge text-xs text-white px-2 py-1 rounded-full">Mental Health</span>' : ''}
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-lg">${sentimentIcon}</span>
+                        <span class="text-sm font-semibold ${sentiment.sentiment_label === 'POSITIVE' ? 'text-green-600' : sentiment.sentiment_label === 'NEGATIVE' ? 'text-red-600' : sentiment.sentiment_label === 'CRISIS' ? 'text-red-700' : 'text-gray-600'}">
+                            ${sentimentText}
+                        </span>
+                    </div>
+                </div>
+                <p class="text-gray-700 mb-2">${sentiment.text}</p>
+                <div class="flex justify-between items-center text-xs text-gray-500">
+                    <span>Score: ${((sentiment.sentiment_score || 0) * 100).toFixed(0)}%</span>
+                    <span>Confidence: ${((sentiment.confidence || 0) * 100).toFixed(0)}%</span>
+                    ${sentiment.needs_attention ? '<span class="text-red-500 font-semibold">⚠️ Needs Attention</span>' : ''}
+                </div>
+            `;
+
+            chatFeed.prepend(messageDiv);
+            
+            // Keep only last 20 messages visible
+            if (chatFeed.children.length > 20) {
+                chatFeed.removeChild(chatFeed.lastChild);
+            }
+        }
+
+        // Add crisis alert (with duplicate prevention)
+        function addCrisisAlert(alert) {
+            if (!alert || !alert.message) {
+                console.warn('Invalid crisis alert received');
+                return;
+            }
+
+            const alertId = `${alert.username}_${alert.message}_${alert.timestamp}`;
+            
+            // Prevent duplicate crisis alerts
+            if (messageHistory.has(`crisis_${alertId}`)) {
+                console.log('Duplicate crisis alert detected, skipping:', alertId);
+                return;
+            }
+            
+            messageHistory.add(`crisis_${alertId}`);
+
+            const alertsContainer = document.getElementById('crisis-alerts');
+            if (!alertsContainer) {
+                console.error('Crisis alerts container not found');
+                return;
+            }
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'p-4 bg-red-50 border border-red-200 rounded-lg crisis-pulse';
+            alertDiv.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <span class="font-semibold text-red-800">${alert.username || 'Anonymous'}</span>
+                        <span class="text-sm text-red-600 ml-2">${new Date(alert.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">CRISIS</span>
+                </div>
+                <p class="text-red-800 font-medium mb-2">${alert.message}</p>
+                <div class="text-xs text-red-600">
+                    🚨 Immediate attention required - High risk detected
+                </div>
+            `;
+
+            alertsContainer.prepend(alertDiv);
+            
+            // Show notification
+            if ('Notification' in window && Notification.permission === 'granted') {
+                try {
+                    new Notification('🚨 Crisis Alert', {
+                        body: `${alert.username}: ${alert.message}`,
+                        icon: '/favicon.ico'
+                    });
+                } catch (error) {
+                    console.error('Error showing notification:', error);
+                }
+            }
+        }
+
+        // Socket event handlers with error handling
+        socket.on('connection_established', function(data) {
+            console.log('Connected to server');
+        });
+
+        socket.on('sentiment_update', function(data) {
+            if (data && data.sentiment_data) {
+                addMessageToFeed(data.sentiment_data);
+            }
+            if (data && data.stats) {
+                updateStatsDisplay(data.stats);
+            }
+        });
+
+        socket.on('crisis_alert', function(alert) {
+            if (alert) {
+                addCrisisAlert(alert);
+            }
+        });
+
+        // Socket error handling
+        socket.on('connect_error', function(error) {
+            console.error('Socket connection error:', error);
+        });
+
+        socket.on('error', function(error) {
+            console.error('Socket error:', error);
+        });
+
+        // Button event listeners with error handling
+        document.getElementById('send-btn')?.addEventListener('click', sendMessage);
+        
+        document.getElementById('message-input')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const usernameInput = document.getElementById('username-input');
+            const messageInput = document.getElementById('message-input');
+            
+            if (!usernameInput || !messageInput) {
+                console.error('Required input elements not found');
+                return;
+            }
+
+            const username = usernameInput.value.trim() || 'Anonymous';
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                alert('Please enter a message');
+                return;
+            }
+
+            // Send via Socket.IO
+            try {
+                socket.emit('send_chat_message', {
+                    username: username,
+                    message: message
+                });
+            } catch (error) {
+                console.error('Error sending message via socket:', error);
+            }
+
+            // Also send via REST API for redundancy
+            fetch('/api/send-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    message: message
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    console.log('Message sent successfully');
+                }
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
+                // You might want to show a user-friendly error message here
+            });
+
+            // Clear input
+            messageInput.value = '';
+        }
+
+        // Request notification permission
+        if ('Notification' in window) {
+            Notification.requestPermission().catch(error => {
+                console.error('Error requesting notification permission:', error);
+            });
+        }
+
+        // Initialize the application
+        initializeCharts();
+
+        // Safe fetch function with duplicate prevention
+        async function safeFetch(url, options = {}) {
+            if (isFetching) {
+                console.log('Fetch already in progress, skipping:', url);
+                return null;
+            }
+            
+            isFetching = true;
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Fetch error for ${url}:`, error);
+                return null;
+            } finally {
+                isFetching = false;
+            }
+        }
+
+        // Load initial stats
+        safeFetch('/api/stats').then(updateStatsDisplay);
+
+        // Load recent messages
+        safeFetch('/api/recent-messages').then(messages => {
+            if (messages && Array.isArray(messages)) {
+                // Clear existing history when loading initial messages
+                messageHistory.clear();
+                messages.forEach(addMessageToFeed);
+            }
+        });
+
+        // Auto-update stats every 3 seconds (with safety checks)
+        setInterval(() => {
+            safeFetch('/api/stats').then(updateStatsDisplay);
+        }, 3000);
+
+        // Clean up message history periodically to prevent memory issues
+        setInterval(() => {
+            if (messageHistory.size > 1000) {
+                const arrayFromSet = Array.from(messageHistory);
+                const newSet = new Set(arrayFromSet.slice(-500)); // Keep only last 500
+                messageHistory.clear();
+                newSet.forEach(item => messageHistory.add(item));
+                console.log('Cleaned up message history');
+            }
+        }, 60000); // Clean every minute
+    </script>
+</body>
+</html>

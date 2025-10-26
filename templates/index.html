@@ -26,6 +26,42 @@
             50% { background-color: #fecaca; }
         }
         .mental-health-badge { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+        
+        .project-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .project-details.open {
+            max-height: 2000px;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .transition-transform {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
@@ -41,17 +77,141 @@
             <p class="text-lg text-gray-600 mb-4">Real-time Big Data Analytics using Pure Python Message Bus</p>
             <div class="flex justify-center space-x-4 text-sm text-gray-500">
                 <span class="flex items-center">
-                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
                     Message Bus
                 </span>
                 <span class="flex items-center">
-                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
                     Real-time AI
                 </span>
                 <span class="flex items-center">
-                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span>
                     Crisis Detection
                 </span>
+            </div>
+            
+            <!-- Project Details Dropdown -->
+            <div class="mt-6">
+                <button id="project-details-toggle" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-105 flex items-center mx-auto">
+                    <span>About This Project</span>
+                    <svg id="dropdown-arrow" class="w-5 h-5 ml-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                
+                <div id="project-details" class="project-details mt-4 text-left">
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border-2 border-blue-200">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">🎯 Project Overview</h3>
+                        <p class="text-gray-700 mb-4">
+                            This is a real-time mental health sentiment detection system that combines Big Data concepts with AI-powered analysis to monitor and analyze mental health discussions in real-time.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <!-- Technologies Used -->
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="text-lg font-bold text-blue-600 mb-3 flex items-center">
+                                    <span class="mr-2">🛠️</span> Technologies Used
+                                </h4>
+                                <ul class="space-y-2 text-sm text-gray-700">
+                                    <li><strong>Backend:</strong> Flask (Python Web Framework)</li>
+                                    <li><strong>Real-time:</strong> Flask-SocketIO (WebSocket)</li>
+                                    <li><strong>Message Bus:</strong> Custom Pure Python Implementation</li>
+                                    <li><strong>AI/ML:</strong> VADER Sentiment + TextBlob</li>
+                                    <li><strong>Storage:</strong> In-Memory Data Storage</li>
+                                    <li><strong>Visualization:</strong> Plotly.js Charts</li>
+                                    <li><strong>Frontend:</strong> HTML5, TailwindCSS, JavaScript</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Key Features -->
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="text-lg font-bold text-purple-600 mb-3 flex items-center">
+                                    <span class="mr-2">⭐</span> Key Features
+                                </h4>
+                                <ul class="space-y-2 text-sm text-gray-700">
+                                    <li>✅ Real-time sentiment analysis</li>
+                                    <li>✅ Mental health context detection</li>
+                                    <li>✅ Crisis alert system</li>
+                                    <li>✅ Live message streaming</li>
+                                    <li>✅ Interactive data visualization</li>
+                                    <li>✅ Duplicate prevention mechanism</li>
+                                    <li>✅ Pure Python message bus (No Kafka)</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Big Data Concepts -->
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="text-lg font-bold text-green-600 mb-3 flex items-center">
+                                    <span class="mr-2">📊</span> Big Data Concepts
+                                </h4>
+                                <ul class="space-y-2 text-sm text-gray-700">
+                                    <li><strong>Stream Processing:</strong> Real-time data flow</li>
+                                    <li><strong>Message Queue:</strong> Pub-Sub architecture</li>
+                                    <li><strong>Data Pipeline:</strong> ETL processing</li>
+                                    <li><strong>Real-time Analytics:</strong> Live metrics</li>
+                                    <li><strong>Event-Driven:</strong> Async processing</li>
+                                    <li><strong>Scalable Design:</strong> Modular components</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- AI/ML Models -->
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="text-lg font-bold text-orange-600 mb-3 flex items-center">
+                                    <span class="mr-2">🤖</span> AI/ML Models
+                                </h4>
+                                <ul class="space-y-2 text-sm text-gray-700">
+                                    <li><strong>VADER:</strong> Sentiment intensity analyzer</li>
+                                    <li><strong>TextBlob:</strong> Polarity & subjectivity</li>
+                                    <li><strong>Custom Keywords:</strong> Mental health terms</li>
+                                    <li><strong>Severity Scoring:</strong> Risk level detection</li>
+                                    <li><strong>Context Analysis:</strong> Domain-specific NLP</li>
+                                    <li><strong>Crisis Detection:</strong> Pattern matching</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Architecture -->
+                        <div class="bg-white p-4 rounded-lg shadow mt-6">
+                            <h4 class="text-lg font-bold text-indigo-600 mb-3 flex items-center">
+                                <span class="mr-2">🏗️</span> System Architecture
+                            </h4>
+                            <div class="text-sm text-gray-700 space-y-2">
+                                <p><strong>1. Message Input:</strong> User sends message via web interface</p>
+                                <p><strong>2. Message Bus:</strong> Pure Python pub-sub system queues message</p>
+                                <p><strong>3. AI Processing:</strong> VADER + TextBlob analyze sentiment</p>
+                                <p><strong>4. Data Storage:</strong> Results stored in-memory</p>
+                                <p><strong>5. Real-time Updates:</strong> WebSocket broadcasts to all clients</p>
+                                <p><strong>6. Visualization:</strong> Live charts and statistics update</p>
+                                <p><strong>7. Crisis Detection:</strong> Alerts triggered for high-risk messages</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Use Cases -->
+                        <div class="bg-white p-4 rounded-lg shadow mt-6">
+                            <h4 class="text-lg font-bold text-pink-600 mb-3 flex items-center">
+                                <span class="mr-2">💡</span> Real-World Applications
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                                <div>
+                                    <p class="font-semibold mb-1">🏥 Healthcare:</p>
+                                    <p>Monitor patient mental health in telehealth platforms</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold mb-1">🎓 Education:</p>
+                                    <p>Track student wellbeing in online learning</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold mb-1">💼 Corporate:</p>
+                                    <p>Employee wellness monitoring and support</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold mb-1">🌐 Social Media:</p>
+                                    <p>Content moderation and user safety</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -61,15 +221,15 @@
                 <span class="mr-2">⚙️</span> System Status
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4" id="services-status">
-                <div class="text-center p-4 bg-green-100 rounded-lg">
+                <div class="text-center p-4 bg-green-100 rounded-lg border-2 border-green-300">
                     <div class="text-sm font-medium text-gray-600">Message Bus</div>
                     <div class="text-lg font-semibold text-green-600">✅ Running</div>
                 </div>
-                <div class="text-center p-4 bg-green-100 rounded-lg">
+                <div class="text-center p-4 bg-green-100 rounded-lg border-2 border-green-300">
                     <div class="text-sm font-medium text-gray-600">Sentiment AI</div>
                     <div class="text-lg font-semibold text-green-600">✅ Active</div>
                 </div>
-                <div class="text-center p-4 bg-blue-100 rounded-lg">
+                <div class="text-center p-4 bg-blue-100 rounded-lg border-2 border-blue-300">
                     <div class="text-sm font-medium text-gray-600">Data Storage</div>
                     <div class="text-lg font-semibold text-blue-600">✅ In-Memory</div>
                 </div>
@@ -82,7 +242,7 @@
         <!-- Big Data Stats Dashboard -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- Total Messages -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300">
+            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300 border-t-4 border-blue-500">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Total Messages</p>
@@ -96,7 +256,7 @@
             </div>
 
             <!-- Positive Sentiment -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300">
+            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300 border-t-4 border-green-500">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Positive</p>
@@ -110,7 +270,7 @@
             </div>
 
             <!-- Negative Sentiment -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300">
+            <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300 border-t-4 border-red-500">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Negative</p>
@@ -124,7 +284,7 @@
             </div>
 
             <!-- Crisis Alerts -->
-            <div id="crisis-stat" class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300 crisis-pulse hidden">
+            <div id="crisis-stat" class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition duration-300 crisis-pulse hidden border-t-4 border-red-600">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-red-600">Crisis Alerts</p>
@@ -141,7 +301,7 @@
         <!-- Charts and Chat Interface -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <!-- Sentiment Chart -->
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6">
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6 border-t-4 border-purple-500">
                 <h3 class="text-lg font-semibold mb-4 flex items-center">
                     <span class="mr-2">📊</span> Real-time Sentiment Analysis
                 </h3>
@@ -149,7 +309,7 @@
             </div>
 
             <!-- Chat Interface -->
-            <div class="bg-white rounded-2xl shadow-lg p-6">
+            <div class="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-indigo-500">
                 <h3 class="text-lg font-semibold mb-4 flex items-center">
                     <span class="mr-2">💭</span> Mental Health Chat
                 </h3>
@@ -157,20 +317,20 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
                         <input type="text" id="username-input" 
-                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               class="w-full p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                                value="WellnessSeeker" placeholder="Enter your name">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
                         <textarea id="message-input" 
-                                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32"
+                                  class="w-full p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-32 transition duration-200"
                                   placeholder="Share how you're feeling... (e.g., 'Feeling anxious about work' or 'Had a great therapy session')"></textarea>
                     </div>
                     <button id="send-btn" 
-                            class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-4 rounded-lg font-semibold transition duration-300 transform hover:scale-105">
+                            class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-4 rounded-lg font-semibold transition duration-300 transform hover:scale-105 shadow-lg">
                         Send & Analyze Message
                     </button>
-                    <div class="text-xs text-gray-500 text-center">
+                    <div class="text-xs text-gray-500 text-center bg-blue-50 p-2 rounded">
                         Messages are processed in real-time using Pure Python Message Bus
                     </div>
                 </div>
@@ -180,24 +340,24 @@
         <!-- Live Feed and Alerts -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Live Message Feed -->
-            <div class="bg-white rounded-2xl shadow-lg">
-                <div class="p-4 border-b border-gray-200">
+            <div class="bg-white rounded-2xl shadow-lg border-t-4 border-green-500">
+                <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-blue-50">
                     <h3 class="text-lg font-semibold flex items-center">
                         <span class="mr-2">🔴</span> Live Message Feed
                     </h3>
                 </div>
                 <div id="chat-feed" class="h-96 overflow-y-auto p-4 space-y-3">
                     <div class="text-center text-gray-500 py-8">
-                        <div class="text-4xl mb-4">💬</div>
-                        <p>Send a message to see real-time sentiment analysis</p>
+                        <div class="text-4xl mb-4 animate-bounce">💬</div>
+                        <p class="font-semibold">Send a message to see real-time sentiment analysis</p>
                         <p class="text-sm mt-2">Powered by Pure Python Message Bus & AI</p>
                     </div>
                 </div>
             </div>
 
             <!-- Crisis Alerts Panel -->
-            <div id="crisis-panel" class="bg-white rounded-2xl shadow-lg hidden">
-                <div class="p-4 border-b border-red-200 bg-red-50">
+            <div id="crisis-panel" class="bg-white rounded-2xl shadow-lg hidden border-t-4 border-red-600">
+                <div class="p-4 border-b border-red-200 bg-gradient-to-r from-red-50 to-orange-50">
                     <h3 class="text-lg font-semibold text-red-800 flex items-center">
                         <span class="mr-2">🚨</span> Crisis Detection Alerts
                     </h3>
@@ -208,33 +368,34 @@
             </div>
 
             <!-- System Insights -->
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg">
-                <div class="p-4 border-b border-gray-200">
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border-t-4 border-yellow-500">
+                <div class="p-4 border-b border-gray-200 bg-gradient-to-r from-yellow-50 to-orange-50">
                     <h3 class="text-lg font-semibold flex items-center">
                         <span class="mr-2">📈</span> System Insights
                     </h3>
                 </div>
                 <div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    <div class="p-4 bg-blue-50 rounded-lg">
+                    <div class="p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-blue-200 transform hover:scale-105 transition duration-300">
                         <div class="text-2xl font-bold text-blue-600" id="avg-sentiment">0.00</div>
-                        <div class="text-sm text-blue-600">Avg Sentiment Score</div>
+                        <div class="text-sm text-blue-600 font-semibold">Avg Sentiment Score</div>
                     </div>
-                    <div class="p-4 bg-purple-50 rounded-lg">
+                    <div class="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg border-2 border-purple-200 transform hover:scale-105 transition duration-300">
                         <div class="text-2xl font-bold text-purple-600" id="mental-health-count">0</div>
-                        <div class="text-sm text-purple-600">Mental Health Messages</div>
+                        <div class="text-sm text-purple-600 font-semibold">Mental Health Messages</div>
                     </div>
-                    <div class="p-4 bg-green-50 rounded-lg">
+                    <div class="p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg border-2 border-green-200 transform hover:scale-105 transition duration-300">
                         <div class="text-2xl font-bold text-green-600" id="attention-needed">0%</div>
-                        <div class="text-sm text-green-600">Need Attention</div>
+                        <div class="text-sm text-green-600 font-semibold">Need Attention</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Big Data Tools Footer -->
-        <div class="mt-8 text-center text-gray-500">
-            <p>Powered by: <span class="font-semibold">Pure Python Message Bus</span> • <span class="font-semibold">Real-time AI Analysis</span> • <span class="font-semibold">Crisis Detection</span></p>
-            <p class="text-sm mt-2">Mental Health Sentiment Detection - Big Data Analytics Project</p>
+        <div class="mt-8 text-center text-gray-500 bg-white rounded-xl shadow-lg p-6">
+            <p class="font-semibold text-lg mb-2">Powered by:</p>
+            <p><span class="font-semibold text-blue-600">Pure Python Message Bus</span> • <span class="font-semibold text-purple-600">Real-time AI Analysis</span> • <span class="font-semibold text-red-600">Crisis Detection</span></p>
+            <p class="text-sm mt-3 text-gray-600">Mental Health Sentiment Detection - Big Data Analytics Project</p>
         </div>
     </div>
 
@@ -245,13 +406,14 @@
         // Chart instances
         let sentimentChart;
 
-        // Duplicate prevention
-        const messageHistory = new Set();
+        // Duplicate prevention with improved tracking
+        const messageHistory = new Map(); // Use Map to store message with timestamp
+        const DUPLICATE_WINDOW = 2000; // 2 seconds window for duplicate detection
         let isFetching = false;
+        let sendingMessage = false;
 
         // Initialize charts
         function initializeCharts() {
-            // Sentiment Distribution Chart
             const sentimentData = [{
                 values: [0, 0, 0, 0],
                 labels: ['Positive', 'Negative', 'Neutral', 'Crisis'],
@@ -280,20 +442,44 @@
             Plotly.newPlot(sentimentChart, sentimentData, layout);
         }
 
-        // Generate unique message ID to prevent duplicates
+        // Generate unique message ID
         function generateMessageId(sentimentData) {
-            return `${sentimentData.username}_${sentimentData.text}_${sentimentData.timestamp}`;
+            const username = sentimentData.username || 'Anonymous';
+            const text = sentimentData.text || sentimentData.message || '';
+            // Use a simpler ID that's less prone to timing issues
+            return `${username}_${text.substring(0, 50)}`.toLowerCase().replace(/\s+/g, '_');
+        }
+
+        // Check if message is duplicate within time window
+        function isDuplicateMessage(messageId) {
+            const now = Date.now();
+            
+            // Clean old entries
+            for (const [id, timestamp] of messageHistory.entries()) {
+                if (now - timestamp > DUPLICATE_WINDOW) {
+                    messageHistory.delete(id);
+                }
+            }
+            
+            // Check if this message exists in recent history
+            if (messageHistory.has(messageId)) {
+                const lastSeen = messageHistory.get(messageId);
+                if (now - lastSeen < DUPLICATE_WINDOW) {
+                    console.log('Duplicate detected within window:', messageId);
+                    return true;
+                }
+            }
+            
+            // Add to history
+            messageHistory.set(messageId, now);
+            return false;
         }
 
         // Update statistics display
         function updateStatsDisplay(stats) {
-            if (!stats) {
-                console.warn('No stats data received');
-                return;
-            }
+            if (!stats) return;
 
             try {
-                // Basic stats
                 document.getElementById('total-messages').textContent = (stats.total_messages || 0).toLocaleString();
                 document.getElementById('positive-percent').textContent = (stats.positive_percent || 0).toFixed(1) + '%';
                 document.getElementById('negative-percent').textContent = (stats.negative_percent || 0).toFixed(1) + '%';
@@ -301,12 +487,10 @@
                 document.getElementById('negative-count').textContent = (stats.sentiment_counts?.NEGATIVE || 0) + ' messages';
                 document.getElementById('crisis-count').textContent = stats.sentiment_counts?.CRISIS || 0;
 
-                // Insights
                 document.getElementById('avg-sentiment').textContent = (stats.average_sentiment || 0).toFixed(2);
                 document.getElementById('mental-health-count').textContent = stats.mental_health_messages || 0;
                 document.getElementById('attention-needed').textContent = (stats.crisis_percent || 0).toFixed(1) + '%';
 
-                // Update pie chart
                 const values = [
                     stats.sentiment_counts?.POSITIVE || 0,
                     stats.sentiment_counts?.NEGATIVE || 0,
@@ -314,11 +498,8 @@
                     stats.sentiment_counts?.CRISIS || 0
                 ];
 
-                Plotly.update(sentimentChart, {
-                    values: [values]
-                });
+                Plotly.update(sentimentChart, { values: [values] });
 
-                // Show/hide crisis panel
                 const crisisStat = document.getElementById('crisis-stat');
                 const crisisPanel = document.getElementById('crisis-panel');
                 if (crisisStat && crisisPanel && (stats.sentiment_counts?.CRISIS || 0) > 0) {
@@ -326,34 +507,24 @@
                     crisisPanel.classList.remove('hidden');
                 }
             } catch (error) {
-                console.error('Error updating stats display:', error);
+                console.error('Error updating stats:', error);
             }
         }
 
-        // Add message to chat feed (with duplicate prevention)
+        // Add message to chat feed with duplicate prevention
         function addMessageToFeed(sentimentData) {
-            if (!sentimentData || !sentimentData.text) {
-                console.warn('Invalid sentiment data received');
-                return;
-            }
+            if (!sentimentData || !sentimentData.text) return;
 
             const messageId = generateMessageId(sentimentData);
             
-            // Prevent duplicates
-            if (messageHistory.has(messageId)) {
-                console.log('Duplicate message detected, skipping:', messageId);
+            // Check for duplicate
+            if (isDuplicateMessage(messageId)) {
                 return;
             }
-            
-            messageHistory.add(messageId);
 
             const chatFeed = document.getElementById('chat-feed');
-            if (!chatFeed) {
-                console.error('Chat feed element not found');
-                return;
-            }
+            if (!chatFeed) return;
             
-            // Remove placeholder if exists
             const placeholder = chatFeed.querySelector('.text-center');
             if (placeholder) placeholder.remove();
 
@@ -409,37 +580,26 @@
 
             chatFeed.prepend(messageDiv);
             
-            // Keep only last 20 messages visible
             if (chatFeed.children.length > 20) {
                 chatFeed.removeChild(chatFeed.lastChild);
             }
         }
 
-        // Add crisis alert (with duplicate prevention)
+        // Add crisis alert with duplicate prevention
         function addCrisisAlert(alert) {
-            if (!alert || !alert.message) {
-                console.warn('Invalid crisis alert received');
-                return;
-            }
+            if (!alert || !alert.message) return;
 
-            const alertId = `${alert.username}_${alert.message}_${alert.timestamp}`;
+            const alertId = `crisis_${alert.username}_${alert.message.substring(0, 50)}`.toLowerCase().replace(/\s+/g, '_');
             
-            // Prevent duplicate crisis alerts
-            if (messageHistory.has(`crisis_${alertId}`)) {
-                console.log('Duplicate crisis alert detected, skipping:', alertId);
+            if (isDuplicateMessage(alertId)) {
                 return;
             }
-            
-            messageHistory.add(`crisis_${alertId}`);
 
             const alertsContainer = document.getElementById('crisis-alerts');
-            if (!alertsContainer) {
-                console.error('Crisis alerts container not found');
-                return;
-            }
+            if (!alertsContainer) return;
             
             const alertDiv = document.createElement('div');
-            alertDiv.className = 'p-4 bg-red-50 border border-red-200 rounded-lg crisis-pulse';
+            alertDiv.className = 'p-4 bg-red-50 border-2 border-red-300 rounded-lg crisis-pulse transform hover:scale-105 transition duration-300';
             alertDiv.innerHTML = `
                 <div class="flex justify-between items-start mb-2">
                     <div>
@@ -449,14 +609,13 @@
                     <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">CRISIS</span>
                 </div>
                 <p class="text-red-800 font-medium mb-2">${alert.message}</p>
-                <div class="text-xs text-red-600">
+                <div class="text-xs text-red-600 font-semibold">
                     🚨 Immediate attention required - High risk detected
                 </div>
             `;
 
             alertsContainer.prepend(alertDiv);
             
-            // Show notification
             if ('Notification' in window && Notification.permission === 'granted') {
                 try {
                     new Notification('🚨 Crisis Alert', {
@@ -469,7 +628,7 @@
             }
         }
 
-        // Socket event handlers with error handling
+        // Socket event handlers
         socket.on('connection_established', function(data) {
             console.log('Connected to server');
         });
@@ -489,7 +648,6 @@
             }
         });
 
-        // Socket error handling
         socket.on('connect_error', function(error) {
             console.error('Socket connection error:', error);
         });
@@ -498,19 +656,16 @@
             console.error('Socket error:', error);
         });
 
-        // Button event listeners with error handling
-        document.getElementById('send-btn')?.addEventListener('click', sendMessage);
-        
-        document.getElementById('message-input')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
+        // Send message function (only via Socket.IO to prevent duplicates)
         function sendMessage() {
+            if (sendingMessage) {
+                console.log('Message already being sent, please wait');
+                return;
+            }
+
             const usernameInput = document.getElementById('username-input');
             const messageInput = document.getElementById('message-input');
+            const sendBtn = document.getElementById('send-btn');
             
             if (!usernameInput || !messageInput) {
                 console.error('Required input elements not found');
@@ -525,46 +680,55 @@
                 return;
             }
 
-            // Send via Socket.IO
+            // Prevent double sending
+            sendingMessage = true;
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+
+            // Send ONLY via Socket.IO
             try {
                 socket.emit('send_chat_message', {
                     username: username,
                     message: message
                 });
+                
+                // Clear input immediately
+                messageInput.value = '';
+                
+                // Re-enable button after delay
+                setTimeout(() => {
+                    sendingMessage = false;
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Send & Analyze Message';
+                }, 1000);
+                
             } catch (error) {
-                console.error('Error sending message via socket:', error);
-            }
-
-            // Also send via REST API for redundancy
-            fetch('/api/send-message', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: username,
-                    message: message
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    console.log('Message sent successfully');
-                }
-            })
-            .catch(error => {
                 console.error('Error sending message:', error);
-                // You might want to show a user-friendly error message here
-            });
-
-            // Clear input
-            messageInput.value = '';
+                sendingMessage = false;
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send & Analyze Message';
+            }
         }
+
+        // Button event listeners
+        document.getElementById('send-btn')?.addEventListener('click', sendMessage);
+        
+        document.getElementById('message-input')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Project details toggle
+        const toggleBtn = document.getElementById('project-details-toggle');
+        const detailsDiv = document.getElementById('project-details');
+        const arrow = document.getElementById('dropdown-arrow');
+
+        toggleBtn?.addEventListener('click', function() {
+            detailsDiv.classList.toggle('open');
+            arrow.classList.toggle('rotate-180');
+        });
 
         // Request notification permission
         if ('Notification' in window) {
@@ -576,10 +740,9 @@
         // Initialize the application
         initializeCharts();
 
-        // Safe fetch function with duplicate prevention
+        // Safe fetch function
         async function safeFetch(url, options = {}) {
             if (isFetching) {
-                console.log('Fetch already in progress, skipping:', url);
                 return null;
             }
             
@@ -601,30 +764,28 @@
         // Load initial stats
         safeFetch('/api/stats').then(updateStatsDisplay);
 
-        // Load recent messages
+        // Load recent messages (only once on page load)
         safeFetch('/api/recent-messages').then(messages => {
             if (messages && Array.isArray(messages)) {
-                // Clear existing history when loading initial messages
                 messageHistory.clear();
-                messages.forEach(addMessageToFeed);
+                messages.reverse().forEach(addMessageToFeed);
             }
         });
 
-        // Auto-update stats every 3 seconds (with safety checks)
+        // Auto-update stats every 5 seconds
         setInterval(() => {
             safeFetch('/api/stats').then(updateStatsDisplay);
-        }, 3000);
+        }, 5000);
 
-        // Clean up message history periodically to prevent memory issues
+        // Clean up message history periodically
         setInterval(() => {
-            if (messageHistory.size > 1000) {
-                const arrayFromSet = Array.from(messageHistory);
-                const newSet = new Set(arrayFromSet.slice(-500)); // Keep only last 500
-                messageHistory.clear();
-                newSet.forEach(item => messageHistory.add(item));
-                console.log('Cleaned up message history');
+            const now = Date.now();
+            for (const [id, timestamp] of messageHistory.entries()) {
+                if (now - timestamp > 30000) { // Remove entries older than 30 seconds
+                    messageHistory.delete(id);
+                }
             }
-        }, 60000); // Clean every minute
+        }, 30000);
     </script>
 </body>
 </html>
